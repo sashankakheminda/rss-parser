@@ -16,12 +16,10 @@ import org.mockito.Mock;
 import java.net.URL;
 import java.util.Collections;
 import java.util.Date;
+import java.util.Optional;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
 
 import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
@@ -39,23 +37,19 @@ public class RSSServiceTest {
     @Mock
     private SyndFeedInput syndFeedInput;
 
-//    @Before
-//    public void setup() {
-//        // Define mock behavior for ItemRepository
-//        Item item1 = new Item();
-//        item1.setId(1L);
-//        item1.setTitle("Example Title 1");
-//        item1.setDescription("Example Description 1");
-//        item1.setPublicationDate(new Date());
-//        item1.setUpdatedDate(null);
-//
-//        when(itemRepository.findByTitle("Example Title")).thenReturn(Optional.of(item1));
-//    }
-
     @Before
     public void setup() {
-        MockitoAnnotations.initMocks(this);
+        // Define mock behavior for ItemRepository
+        Item item1 = new Item();
+        item1.setId(1L);
+        item1.setTitle("Example Title 1");
+        item1.setDescription("Example Description 1");
+        item1.setPublicationDate(new Date());
+        item1.setUpdatedDate(null);
+
+        Mockito.when(itemRepository.findByTitle("Example Title")).thenReturn(Optional.of(item1));
     }
+
 
     @Test
     public void testPollRSSFeed() throws Exception {
@@ -86,7 +80,7 @@ public class RSSServiceTest {
         Mockito.when(mockFeed.getEntries()).thenReturn(Collections.singletonList(mockEntry));
 
         // Create an instance of the RSSService class
-        RSSServiceImpl rssService = new RSSServiceImpl(itemRepository, syndFeedInput);
+        RSSServiceImpl rssService = new RSSServiceImpl(itemRepository);
 
         // Call the method under test
         rssService.pollRSSFeed();

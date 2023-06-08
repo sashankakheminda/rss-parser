@@ -1,7 +1,6 @@
 package com.example.rssparser.controller;
 
 import com.example.rssparser.model.ApiResponse;
-import com.example.rssparser.model.Item;
 import com.example.rssparser.model.ResponseBuilder;
 import com.example.rssparser.service.ItemService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +9,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
 
 @RestController
 public class ItemController {

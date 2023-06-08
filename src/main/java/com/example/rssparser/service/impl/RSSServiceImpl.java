@@ -9,6 +9,7 @@ import com.rometools.rome.io.SyndFeedInput;
 import com.rometools.rome.io.XmlReader;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -23,21 +24,20 @@ import java.util.stream.Collectors;
 public class RSSServiceImpl {
     private final ItemRepository itemRepository;
 
-    private final SyndFeedInput syndFeedInput;
-
     @Autowired
-    public RSSServiceImpl(ItemRepository itemRepository, SyndFeedInput syndFeedInput) {
+    public RSSServiceImpl(ItemRepository itemRepository) {
         this.itemRepository = itemRepository;
-        this.syndFeedInput = syndFeedInput;
     }
 
+    @Value("${rss.feed.url}")
+    private String feedUrlEndPoint;
+
     @SneakyThrows
-    @Scheduled(fixedRate = 60000) // Run every 5 minutes
+    @Scheduled(cron = "${rss.polling.interval}") // Run every 5 minutes
     public void pollRSSFeed() {
-        System.out.println("running cron job");
         try {
             // Replace the URL with the RSS feed URL you want to consume
-            URL feedUrl = new URL("https://feeds.simplecast.com/54nAGcIl");
+            URL feedUrl = new URL(feedUrlEndPoint);
 
             SyndFeedInput input = new SyndFeedInput();
             SyndFeed feed = input.build(new XmlReader(feedUrl));
